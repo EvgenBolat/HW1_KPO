@@ -1,4 +1,5 @@
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -33,13 +34,25 @@ const val menu = "Список команд: \n" +
         "0) Выйти \n" +
         "Введите номер команды: "
 
-fun isDateValid(date: String?): Boolean {
+fun isDateTimeValid(date: String?): Boolean {
     val myFormat = SimpleDateFormat("dd/MM/yyyy HH:mm")
     myFormat.isLenient = false
     try {
         myFormat.parse(date)
         val dateToLocalDateTime = LocalDateTime.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
         return dateToLocalDateTime > LocalDateTime.now()
+    } catch (e: Exception) {
+        return false
+    }
+}
+
+fun isDateValid(date: String?): Boolean {
+    val myFormat = SimpleDateFormat("dd/MM/yyyy")
+    myFormat.isLenient = false
+    try {
+        myFormat.parse(date)
+        val dateToLocalDateTime = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        return dateToLocalDateTime > LocalDate.now()
     } catch (e: Exception) {
         return false
     }

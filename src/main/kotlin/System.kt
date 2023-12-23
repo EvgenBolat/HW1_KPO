@@ -82,7 +82,7 @@ class System {
     }
 
     fun showSessionsByDate(date: String) : String {
-        return sessionsRepository.showSessionsByDate(date)
+        return sessionsRepository.showSessionsByDate(moviesRepository.moviesArray,date)
     }
 
     fun showMovies() : String {

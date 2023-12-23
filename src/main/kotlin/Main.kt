@@ -67,7 +67,7 @@ fun main() {
             "1" -> {
                 println("Введите дату и время сеанса (DD/MM/YYYY HH:MM): ")
                 var sessionDate : String = readln()
-                while (!isDateValid(sessionDate)) {
+                while (!isDateTimeValid(sessionDate)) {
                     println("Пожалуйста введите корректную дату: ")
                     sessionDate = readln()
                 }
@@ -144,7 +144,7 @@ fun main() {
                 val movieName : String = readln()
                 println("Введите дату и время сеанса (DD/MM/YYYY HH:MM): ")
                 var sessionDate : String = readln()
-                while (!isDateValid(sessionDate)) {
+                while (!isDateTimeValid(sessionDate)) {
                     println("Пожалуйста введите корректную дату: ")
                     sessionDate = readln()
                 }
@@ -161,13 +161,13 @@ fun main() {
             "9" -> {
                 println("Введите дату и время (DD/MM/YYYY HH:MM) сеанса, который вы хотите изменить: ")
                 var sessionDate : String = readln()
-                while (!isDateValid(sessionDate)) {
+                while (!isDateTimeValid(sessionDate)) {
                     println("Пожалуйста введите корректную дату: ")
                     sessionDate = readln()
                 }
                 println("Введите новую дату и время (DD/MM/YYYY HH:MM) сеанса: ")
                 var newDate : String = readln()
-                while (!isDateValid(newDate)) {
+                while (!isDateTimeValid(newDate)) {
                     println("Пожалуйста введите корректную дату: ")
                     newDate = readln()
                 }
@@ -177,7 +177,7 @@ fun main() {
             "10" -> {
                 println("Введите дату и время (DD/MM/YYYY HH:MM) сеанса, который вы хотите изменить: ")
                 var sessionDate : String = readln()
-                while (!isDateValid(sessionDate)) {
+                while (!isDateTimeValid(sessionDate)) {
                     println("Пожалуйста введите корректную дату: ")
                     sessionDate = readln()
                 }
@@ -194,7 +194,7 @@ fun main() {
             "11" -> {
                 println("Введите дату и время (DD/MM/YYYY HH:MM) сеанса, который вы хотите удалить: ")
                 var sessionDate : String = readln()
-                while (!isDateValid(sessionDate)) {
+                while (!isDateTimeValid(sessionDate)) {
                     println("Пожалуйста введите корректную дату: ")
                     sessionDate = readln()
                 }
@@ -204,7 +204,7 @@ fun main() {
             "12" -> {
                 println("Введите дату и время (DD/MM/YYYY HH:MM) сеанса, места которого вы хотите посмотреть: ")
                 var sessionDate : String = readln()
-                while (!isDateValid(sessionDate)) {
+                while (!isDateTimeValid(sessionDate)) {
                     println("Пожалуйста введите корректную дату: ")
                     sessionDate = readln()
                 }
@@ -218,7 +218,7 @@ fun main() {
             }
 
             "14" -> {
-                println("Введите дату и время (DD/MM/YYYY HH:MM): ")
+                println("Введите дату (DD/MM/YYYY): ")
                 var sessionDate : String = readln()
                 while (!isDateValid(sessionDate)) {
                     println("Пожалуйста введите корректную дату: ")

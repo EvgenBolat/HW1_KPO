@@ -4,6 +4,7 @@ import dao.JSONSessionsSerializer
 import entities.Movie
 import entities.Session
 import sessionsFilePath
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -41,29 +42,29 @@ class SessionsRepository {
     }
 
     fun addSession(moviesRepository: MoviesRepository,id:String, movieName: String, date: String, cost: UInt) : String {
-        val currMovieId = moviesRepository.findMovie(movieName)
-        if (currMovieId == "") {
-            return ("В каталоге нет такого фильма.")
-        }
+        val currMovie = moviesRepository.findMovie(movieName) ?: return ("В каталоге нет такого фильма.")
         if (sessionsArray != null) {
             for (session in sessionsArray!!){
                 for (movie in moviesRepository.moviesArray!!){
                     if (movie.id == session.movieId){
-                        val dateToLocalDateTime = LocalDateTime.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+                        val startOfTheNewSession = LocalDateTime.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+                        val endOfTheNewSession = startOfTheNewSession.plusHours(
+                            (currMovie.duration / 60u).toLong()).plusMinutes((currMovie.duration - currMovie.duration / 60u * 60u).toLong())
                         val startOfTheMovie = LocalDateTime.parse(session.date, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
                         val endOfTheMovie = startOfTheMovie.plusHours(
-                            (movie.duration / 60u).toLong()).plusMinutes((movie.duration - movie.duration / 60u).toLong())
-                        if (dateToLocalDateTime >= startOfTheMovie &&
-                            dateToLocalDateTime <= endOfTheMovie.plusMinutes(15L)){
+                            (movie.duration / 60u).toLong()).plusMinutes((movie.duration - movie.duration / 60u * 60u).toLong())
+                        if (startOfTheNewSession >= startOfTheMovie &&
+                            startOfTheNewSession <= endOfTheMovie.plusMinutes(15L) || endOfTheNewSession.plusMinutes(15L) in startOfTheMovie..endOfTheMovie
+                        ){
                             return "Это время уже занято."
                         }
                     }
                 }
             }
-            sessionsArray = sessionsArray!! + Session(id, currMovieId, date, cost)
+            sessionsArray = sessionsArray!! + Session(id, currMovie.id, date, cost)
         }
         else {
-            sessionsArray = arrayOf(Session(id, currMovieId, date, cost))
+            sessionsArray = arrayOf(Session(id, currMovie.id, date, cost))
         }
         JSONSessionsSerializer().jsonSerialize(path, sessionsArray!!)
         return "Сеанс успешно добавлен."
@@ -133,12 +134,14 @@ class SessionsRepository {
     }
 
     fun showSessionsByName(moviesRepository: MoviesRepository, movieName: String) : String {
-        val id = moviesRepository.findMovie(movieName)
+        val id = moviesRepository.findMovie(movieName)?.id
         if (sessionsArray != null) {
             var result = ""
             for (session in sessionsArray!!){
-                if (session.movieId.lowercase(Locale.getDefault()) == id.lowercase(Locale.getDefault())){
-                    result += session.toString()
+                if (id != null) {
+                    if (session.movieId.lowercase(Locale.getDefault()) == id.lowercase(Locale.getDefault())){
+                        result += session.toString()
+                    }
                 }
             }
             if (result != "") {
@@ -146,15 +149,17 @@ class SessionsRepository {
             }
             return "Пока что нет сеансов по фильму: $movieName"
         }
-        return "Пока что нет запланированных сессий!"
+        return "Пока что нет запланированных сеансов!"
     }
 
-    fun showSessionsByDate(date: String) : String {
+    fun showSessionsByDate(moviesArray: Array<Movie>?, date: String) : String {
         if (sessionsArray != null) {
             var result = ""
             for (session in sessionsArray!!){
-                if (session.date.lowercase(Locale.getDefault()) == date.lowercase(Locale.getDefault())){
-                    result += session.toString()
+                val sessionDate = LocalDateTime.parse(session.date, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+                val parsedDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                if (sessionDate.year == parsedDate.year && sessionDate.monthValue == parsedDate.monthValue && sessionDate.dayOfMonth == parsedDate.dayOfMonth){
+                    result += session.toString(moviesArray)
                 }
             }
             if (result != "") {
