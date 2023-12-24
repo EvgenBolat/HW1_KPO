@@ -52,6 +52,18 @@ class SessionsRepository {
         }
     }
 
+    fun removeSeat(sessionId: String, place: UInt){
+        if (sessionsArray != null){
+            for (session in sessionsArray!!){
+                if (session.id == sessionId){
+                    --session.places[(place - 1u).toInt()]
+                    JSONSessionsSerializer().jsonSerialize(path, sessionsArray!!)
+                    return
+                }
+            }
+        }
+    }
+
     fun addSession(moviesRepository: MoviesRepository,id:String, movieName: String, date: String, cost: UInt) : String {
         val currMovie = moviesRepository.findMovie(movieName) ?: return ("В каталоге нет такого фильма.")
         if (sessionsArray != null) {

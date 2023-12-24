@@ -47,12 +47,14 @@ class TicketsRepository {
                                 ) <= LocalDateTime.now()) {
                                 return "Сеанс уже идёт"
                             }
+                            sessionsRepository.removeSeat(session.id, ticket.place)
+                            tickets -= ticket
+                            ticketsArray = tickets.toTypedArray()
+                            JSONTicketsSerializer().jsonSerialize(path, ticketsArray!!)
+                            return "Билет возвращён"
                         }
                     }
-                    tickets -= ticket
-                    ticketsArray = tickets.toTypedArray()
-                    JSONTicketsSerializer().jsonSerialize(path, ticketsArray!!)
-                    return "Билет возвращён"
+
                 }
             }
         }
