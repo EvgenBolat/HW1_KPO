@@ -12,7 +12,8 @@ class MoviesRepository {
     fun findMovie(name: String): Movie? {
         if (moviesArray != null) {
             for (movie in moviesArray!!) {
-                if (movie.name.lowercase(Locale.getDefault()) == name.lowercase(Locale.getDefault())) {
+                if (movie.name.lowercase(Locale.getDefault()) == name.lowercase(Locale.getDefault()) || movie.id.lowercase(Locale.getDefault()) == name.lowercase(
+                        Locale.getDefault())) {
                     return movie
                 }
             }
