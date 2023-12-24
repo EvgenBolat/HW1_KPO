@@ -32,6 +32,6 @@ class Session(val id: String, var movieId: String, var date: String, var cost: U
                 }
             }
         }
-        return ("Сеанс фильма '$movieName' в дату: $date стоит $cost. \n")
+        return ("Сеанс фильма '$movieName' в дату: $date стоит $cost руб. \n")
     }
 }

@@ -50,7 +50,7 @@ class System {
     }
 
     fun editSessionDate(date: String, newDate: String) : String {
-        return sessionsRepository.editSessionDate(ticketsRepository, date, newDate)
+        return sessionsRepository.editSessionDate(moviesRepository, ticketsRepository, date, newDate)
     }
 
     fun editSessionCost(date: String, newCost: UInt) : String {
@@ -66,7 +66,7 @@ class System {
     }
 
     fun returnTicket(ticketId: String) : String {
-        return ticketsRepository.returnTicket(ticketId)
+        return ticketsRepository.returnTicket(sessionsRepository,ticketId)
     }
 
     fun tagVisitor(ticketId: String) : String {
