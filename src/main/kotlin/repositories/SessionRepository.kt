@@ -33,8 +33,9 @@ class SessionsRepository {
                 if (moviesArray != null) {
                     for (movie in moviesArray){
                         if (movie.id == session.movieId){
-                            val endOfTheMovie = LocalDateTime.parse(session.date, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")).plusHours(
-                                (movie.duration / 60u).toLong()).plusMinutes((movie.duration - movie.duration / 60u).toLong())
+                            val startOfTheNewSession = LocalDateTime.parse(session.date, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+                            val endOfTheMovie = startOfTheNewSession.plusHours(
+                                (movie.duration / 60u).toLong()).plusMinutes((movie.duration - movie.duration / 60u * 60u).toLong())
                             if (localDateTime > endOfTheMovie){
                                 ticketsRepository.removeTickets(session.id)
                                 sessionsList -= session
