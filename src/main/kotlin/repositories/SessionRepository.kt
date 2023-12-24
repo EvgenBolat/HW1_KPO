@@ -70,13 +70,17 @@ class SessionsRepository {
         return "Сеанс успешно добавлен."
     }
 
-    fun editSessionDate(ticketsRepository: TicketsRepository, date: String, newDate: String) : String {
+    fun editSessionDate(ticketsRepository: TicketsRepository, date: String, newDate: String): String {
         if (sessionsArray != null) {
-            for (session in sessionsArray!!){
-                if (session.date.lowercase(Locale.getDefault()) == date.lowercase(Locale.getDefault())){
+            for (session in sessionsArray!!) {
+                if (session.date.lowercase(Locale.getDefault()) == date.lowercase(Locale.getDefault())) {
+                    if (LocalDateTime.parse(session.date, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+                    ) <= LocalDateTime.now()) {
+                        return "Сеанс уже идёт"
+                    }
                     session.date = newDate
                     ticketsRepository.editDate(session.id, newDate)
-                    JSONSessionsSerializer().jsonSerialize(path ,sessionsArray!!)
+                    JSONSessionsSerializer().jsonSerialize(path, sessionsArray!!)
                     return "Дата и время сеанса успешно изменены."
                 }
             }
@@ -108,7 +112,7 @@ class SessionsRepository {
                     if (ticketsRepository.ticketsArray != null){
                         for (ticket in ticketsRepository.ticketsArray!!){
                             if (ticket.sessionId == session.id){
-                                ticketsRepository.returnTicket(ticket.id)
+                                ticketsRepository.returnTicket(this, ticket.id)
                             }
                         }
                     }
