@@ -23,6 +23,7 @@ class SessionsRepository {
         }
         return null
     }
+
     fun clearSessions(moviesArray: Array<Movie>?, ticketsRepository: TicketsRepository, localDateTime: LocalDateTime) {
         val sessionsList: MutableList<Session>
         if (sessionsArray != null){
